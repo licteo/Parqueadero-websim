@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Parqueadero</title>
+    <!-- Tailwind CSS CDN para estilos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f8ff;
+            color: #1f2937;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-7xl mx-auto bg-white p-8 rounded-3xl shadow-xl border border-gray-200">
+        <h1 class="text-4xl font-bold mb-6 text-center text-blue-800">Parqueadero "EL PATIO"</h1>
+
+        <!-- Formulario de Entrada de Vehículos -->
+        <div class="bg-blue-50 p-6 rounded-2xl shadow-md mb-8">
+            <h2 class="text-2xl font-semibold mb-4 text-blue-700">Registro de Entrada</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Placa -->
+                <div>
+                    <label for="placa" class="block text-sm font-medium text-gray-700">Placa</label>
+                    <input type="text" id="placa" placeholder="Ej: ABC-123" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm p-3 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+                </div>
+                <!-- Tipo de Vehículo -->
+                <div>
+                    <label for="tipoVehiculo" class="block text-sm font-medium text-gray-700">Tipo de Vehículo</label>
+                    <select id="tipoVehiculo" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm p-3 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+                        <option value="Carro">Carro Particular</option>
+                        <option value="Moto">Moto</option>
+                        <option value="Buseta">Buseta</option>
+                        <option value="Turbo">Turbo</option>
+                        <option value="Pintor/Mecánico">Pintor/Mecánico</option>
+                    </select>
+                </div>
+                <!-- Subtipo de Vehículo -->
+                <div id="subtipo-container" style="display: none;">
+                    <label for="subtipo" class="block text-sm font-medium text-gray-700">Subtipo / Nombre</label>
+                    <select id="subtipo" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm p-3 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+                        <!-- Opciones de subtipo se llenarán con JS -->
+                    </select>
+                </div>
+                 <!-- Tipo de Pago -->
+                <div>
+                    <label for="tipoPago" class="block text-sm font-medium text-gray-700">Tipo de Pago</label>
+                    <select id="tipoPago" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm p-3 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+                        <option value="diario">Diario</option>
+                        <option value="mensual">Mensual</option>
+                    </select>
+                </div>
+                <!-- Precio Mensual (si aplica) -->
+                <div id="precioMensualContainer" class="hidden">
+                    <label for="precioMensual" class="block text-sm font-medium text-gray-700">Precio Mensual</label>
+                    <input type="number" id="precioMensual" placeholder="Ej: 80000" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm p-3 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+                </div>
+            </div>
+            <div class="mt-6 text-center">
+                <button id="btnRegistrarEntrada" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-colors duration-200">
+                    Registrar Entrada
+                </button>
+            </div>
+        </div>
+
+        <!-- Mensajes de la aplicación -->
+        <div id="app-messages" class="text-center text-sm font-medium text-red-600 mb-4"></div>
+
+        <!-- Vehículos en el Parqueadero -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-semibold mb-4 text-blue-700">Vehículos en el Parqueadero (<span id="count-parqueadero">0</span>)</h2>
+            <div class="overflow-x-auto rounded-xl shadow-md">
+                <table class="min-w-full bg-blue-50 border border-blue-200 rounded-xl">
+                    <thead>
+                        <tr class="bg-blue-100 text-blue-800 uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 text-left">Placa</th>
+                            <th class="py-3 px-6 text-left">Tipo</th>
+                            <th class="py-3 px-6 text-left">Subtipo</th>
+                            <th class="py-3 px-6 text-left">Entrada</th>
+                            <th class="py-3 px-6 text-left">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaVehiculos" class="text-gray-700 text-sm font-light">
+                        <!-- Vehículos en el parqueadero se renderizarán aquí -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Historial de Vehículos -->
+        <div>
+            <h2 class="text-2xl font-semibold mb-4 text-blue-700">Historial</h2>
+            <div class="overflow-x-auto rounded-xl shadow-md">
+                <table class="min-w-full bg-blue-50 border border-blue-200 rounded-xl">
+                    <thead>
+                        <tr class="bg-blue-100 text-blue-800 uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 text-left">Placa</th>
+                            <th class="py-3 px-6 text-left">Tipo</th>
+                            <th class="py-3 px-6 text-left">Entrada</th>
+                            <th class="py-3 px-6 text-left">Salida</th>
+                            <th class="py-3 px-6 text-left">Costo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historialVehiculos" class="text-gray-700 text-sm font-light">
+                        <!-- Historial se renderizará aquí -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Constantes y variables para la lógica de la aplicación
+            const precios = {
+                'Carro': 5000,
+                'Moto': 2000,
+                'Buseta': 6000,
+                'Turbo': 8000,
+                'Pintor/Mecánico': 0 // Se cobra por mes, no por día
+            };
+
+            const subtipos = {
+                'Buseta': ['Lusitania', 'San Juan', 'Unitransa', 'Cotransa', 'Flotax'],
+                'Pintor/Mecánico': ['Don Iván', 'Don Álvaro', 'Don David', 'Don Jon', 'Don Pedro', 'Don Garavito', 'Don Lucho', 'Don Cristian', 'Don Miguel', 'Don Francisco', 'Moisés']
+            };
+
+            let vehiculosParqueados = [];
+            let historial = [];
+
+            // Referencias a elementos del DOM
+            const placaInput = document.getElementById('placa');
+            const tipoVehiculoSelect = document.getElementById('tipoVehiculo');
+            const subtipoContainer = document.getElementById('subtipo-container');
+            const subtipoSelect = document.getElementById('subtipo');
+            const tipoPagoSelect = document.getElementById('tipoPago');
+            const precioMensualContainer = document.getElementById('precioMensualContainer');
+            const precioMensualInput = document.getElementById('precioMensual');
+            const btnRegistrarEntrada = document.getElementById('btnRegistrarEntrada');
+            const listaVehiculosTable = document.getElementById('listaVehiculos');
+            const historialVehiculosTable = document.getElementById('historialVehiculos');
+            const countParqueadero = document.getElementById('count-parqueadero');
+            const appMessages = document.getElementById('app-messages');
+
+            // --- Lógica de la aplicación ---
+
+            // Cargar datos desde localStorage al iniciar
+            const cargarDatos = () => {
+                const parqueados = localStorage.getItem('vehiculosParqueados');
+                const historialGuardado = localStorage.getItem('historialParqueadero');
+                if (parqueados) {
+                    vehiculosParqueados = JSON.parse(parqueados);
+                }
+                if (historialGuardado) {
+                    historial = JSON.parse(historialGuardado);
+                }
+                renderizarVehiculos();
+                renderizarHistorial();
+            };
+
+            // Guardar datos en localStorage
+            const guardarDatos = () => {
+                localStorage.setItem('vehiculosParqueados', JSON.stringify(vehiculosParqueados));
+                localStorage.setItem('historialParqueadero', JSON.stringify(historial));
+            };
+
+            // Mostrar mensajes en la interfaz de usuario
+            const showMessage = (message, isError = false) => {
+                appMessages.textContent = message;
+                appMessages.classList.toggle('text-red-600', isError);
+                appMessages.classList.toggle('text-green-600', !isError);
+                setTimeout(() => {
+                    appMessages.textContent = '';
+                }, 3000);
+            };
+
+            // Actualizar opciones de subtipo según el tipo de vehículo
+            const actualizarSubtipo = () => {
+                const tipo = tipoVehiculoSelect.value;
+                if (subtipos[tipo]) {
+                    subtipoContainer.style.display = 'block';
+                    subtipoSelect.innerHTML = subtipos[tipo].map(s => `<option value="${s}">${s}</option>`).join('');
+                } else {
+                    subtipoContainer.style.display = 'none';
+                    subtipoSelect.innerHTML = '';
+                }
+            };
+
+            // Mostrar/Ocultar campo de precio mensual
+            const actualizarPrecioMensual = () => {
+                precioMensualContainer.classList.toggle('hidden', tipoPagoSelect.value !== 'mensual');
+            };
+
+            // Registrar la entrada de un vehículo
+            const registrarEntrada = () => {
+                const placa = placaInput.value.toUpperCase().trim();
+                const tipo = tipoVehiculoSelect.value;
+                const subtipo = subtipoSelect.value || 'N/A';
+                const tipoPago = tipoPagoSelect.value;
+                const precioMensual = (tipoPago === 'mensual') ? parseFloat(precioMensualInput.value) || 0 : 0;
+                const horaEntrada = new Date();
+
+                if (!placa) {
+                    showMessage('La placa es obligatoria.', true);
+                    return;
+                }
+
+                if (vehiculosParqueados.find(v => v.placa === placa)) {
+                    showMessage('Este vehículo ya se encuentra en el parqueadero.', true);
+                    return;
+                }
+
+                const nuevoVehiculo = {
+                    placa,
+                    tipo,
+                    subtipo,
+                    horaEntrada: horaEntrada.toISOString(),
+                    tipoPago,
+                    precioMensual
+                };
+
+                vehiculosParqueados.unshift(nuevoVehiculo);
+                guardarDatos();
+                renderizarVehiculos();
+                showMessage(`Vehículo con placa ${placa} registrado.`);
+
+                // Limpiar campos del formulario
+                placaInput.value = '';
+                tipoVehiculoSelect.value = 'Carro';
+                actualizarSubtipo();
+                tipoPagoSelect.value = 'diario';
+                actualizarPrecioMensual();
+                precioMensualInput.value = '';
+            };
+
+            // Calcular el costo de la estadía
+            const calcularCosto = (vehiculo) => {
+                if (vehiculo.tipoPago === 'mensual') {
+                    return vehiculo.precioMensual;
+                }
+
+                const horaSalida = new Date();
+                const horaEntrada = new Date(vehiculo.horaEntrada);
+                const tiempoEnMs = horaSalida - horaEntrada;
+                const tiempoEnHoras = tiempoEnMs / (1000 * 60 * 60);
+
+                // Si ha estado menos de 24 horas, se cobra la tarifa diaria.
+                // Si ha estado más de 24 horas, se asume un día completo.
+                // Esta es una lógica simple, puede ser ajustada según necesidades.
+                let costoDiario = precios[vehiculo.tipo];
+                if (vehiculo.tipo === 'Pintor/Mecánico') {
+                    costoDiario = 0; // No se cobra por día
+                }
+                const costo = costoDiario;
+                return costo;
+            };
+
+            // Registrar la salida de un vehículo
+            const sacarVehiculo = (placa) => {
+                const index = vehiculosParqueados.findIndex(v => v.placa === placa);
+                if (index === -1) {
+                    showMessage('Vehículo no encontrado.', true);
+                    return;
+                }
+
+                const vehiculo = vehiculosParqueados[index];
+                const costo = calcularCosto(vehiculo);
+                const horaSalida = new Date();
+
+                const vehiculoHistorial = {
+                    ...vehiculo,
+                    horaSalida: horaSalida.toISOString(),
+                    costo
+                };
+
+                // Mover al historial
+                historial.unshift(vehiculoHistorial);
+                // Eliminar del parqueadero
+                vehiculosParqueados.splice(index, 1);
+
+                guardarDatos();
+                renderizarVehiculos();
+                renderizarHistorial();
+                
+                let costoMensaje = '';
+                if (vehiculoHistorial.tipoPago === 'mensual') {
+                    costoMensaje = `Precio Mensual: $${new Intl.NumberFormat('es-CO').format(costo)}`;
+                } else {
+                    costoMensaje = `Costo Diario: $${new Intl.NumberFormat('es-CO').format(costo)}`;
+                }
+
+                showMessage(`Vehículo con placa ${placa} ha salido. ${costoMensaje}`);
+            };
+
+            // Renderizar la tabla de vehículos en el parqueadero
+            const renderizarVehiculos = () => {
+                listaVehiculosTable.innerHTML = '';
+                countParqueadero.textContent = vehiculosParqueados.length;
+                vehiculosParqueados.forEach(v => {
+                    const row = document.createElement('tr');
+                    row.className = 'border-b border-gray-200 hover:bg-gray-50';
+                    row.innerHTML = `
+                        <td class="py-3 px-6 text-left whitespace-nowrap">${v.placa}</td>
+                        <td class="py-3 px-6 text-left">${v.tipo}</td>
+                        <td class="py-3 px-6 text-left">${v.subtipo}</td>
+                        <td class="py-3 px-6 text-left">${new Date(v.horaEntrada).toLocaleString('es-ES')}</td>
+                        <td class="py-3 px-6 text-left">
+                            <button onclick="sacarVehiculo('${v.placa}')" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full shadow-lg transition-colors duration-200">
+                                Salida
+                            </button>
+                        </td>
+                    `;
+                    listaVehiculosTable.appendChild(row);
+                });
+            };
+
+            // Renderizar la tabla del historial
+            const renderizarHistorial = () => {
+                historialVehiculosTable.innerHTML = '';
+                historial.forEach(v => {
+                    const row = document.createElement('tr');
+                    row.className = 'border-b border-gray-200 hover:bg-gray-50';
+                    const costoFormateado = v.costo ? new Intl.NumberFormat('es-CO').format(v.costo) : 'N/A';
+                    row.innerHTML = `
+                        <td class="py-3 px-6 text-left whitespace-nowrap">${v.placa}</td>
+                        <td class="py-3 px-6 text-left">${v.tipo}</td>
+                        <td class="py-3 px-6 text-left">${new Date(v.horaEntrada).toLocaleString('es-ES')}</td>
+                        <td class="py-3 px-6 text-left">${new Date(v.horaSalida).toLocaleString('es-ES')}</td>
+                        <td class="py-3 px-6 text-left">$${costoFormateado}</td>
+                    `;
+                    historialVehiculosTable.appendChild(row);
+                });
+            };
+
+            // Event Listeners
+            tipoVehiculoSelect.addEventListener('change', actualizarSubtipo);
+            tipoPagoSelect.addEventListener('change', actualizarPrecioMensual);
+            btnRegistrarEntrada.addEventListener('click', registrarEntrada);
+
+            // Hacer las funciones globales para que los botones en el HTML las puedan llamar
+            window.sacarVehiculo = sacarVehiculo;
+
+            // Iniciar la aplicación
+            cargarDatos();
+            actualizarSubtipo();
+            actualizarPrecioMensual();
+        });
+    </script>
+</body>
+</html>
