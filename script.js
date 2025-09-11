@@ -1,28 +1,38 @@
-// Main entry point - imports and initializes the application
+// Main entry point - imports and system initialization
 import { ParkingManager } from './modules/ParkingManager.js';
 import { StorageService } from './modules/StorageService.js';
 import { NotificationService } from './modules/NotificationService.js';
 import { PrintService } from './modules/PrintService.js';
 import { MonthlyReportService } from './modules/MonthlyReportService.js';
 
-// Initialize the application
-document.addEventListener('DOMContentLoaded', () => {
-    const storageService = new StorageService();
-    const notificationService = new NotificationService();
-    const printService = new PrintService();
-    const monthlyReportService = new MonthlyReportService(storageService);
-    
-    const parkingManager = new ParkingManager(
-        storageService,
-        notificationService,
-        printService,
-        monthlyReportService
-    );
-    
-    // Make parkingManager globally available for HTML onclick handlers
-    window.parkingManager = parkingManager;
-    
-    // Add dynamic styles for notifications
+document.addEventListener('DOMContentLoaded', initializeApp);
+
+function initializeApp() {
+    try {
+        const storageService = new StorageService();
+        const notificationService = new NotificationService();
+        const printService = new PrintService();
+        const monthlyReportService = new MonthlyReportService(storageService);
+        
+        const parkingManager = new ParkingManager(
+            storageService,
+            notificationService,
+            printService,
+            monthlyReportService
+        );
+        
+        window.parkingManager = parkingManager;
+        
+        // Add notification styles
+        addNotificationStyles();
+        
+    } catch (error) {
+        console.error('Error initializing app:', error);
+        alert('Error al inicializar la aplicación');
+    }
+}
+
+function addNotificationStyles() {
     const style = document.createElement('style');
     style.textContent = `
         @keyframes slideInRight {
@@ -57,4 +67,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     `;
     document.head.appendChild(style);
-});
+}
+
+// Global functions for HTML onclick handlers
+window.printReport = function(type) {
+    if (window.parkingManager) {
+        window.parkingManager.printReport(type);
+    }
+};
+
+window.generateMonthlyReport = function() {
+    if (window.parkingManager) {
+        window.parkingManager.generateMonthlyReport();
+    }
+};
+
+window.printMonthlyReport = function(month) {
+    if (window.parkingManager) {
+        window.parkingManager.printMonthlyReport(month);
+    }
+};

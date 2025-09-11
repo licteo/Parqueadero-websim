@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Gestión de Parqueadero</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -36,9 +36,9 @@
                         </select>
                     </div>
 
-                    <div id="personNameContainer" class="form-group hidden">
+                    <div id="personNameContainer" class="form-group">
                         <label for="personName" class="form-label">Nombre de la Persona</label>
-                        <input type="text" id="personName" class="form-input" placeholder="Ingrese el nombre de la persona">
+                        <input type="text" id="personName" class="form-input" placeholder="Ingrese el nombre de la persona" required>
                     </div>
 
                     <div id="busetaOptions" class="form-group hidden">
@@ -85,9 +85,9 @@
                         <input type="number" id="monthlyPrice" class="form-input" placeholder="Ingrese el precio mensual">
                     </div>
 
-                    <div id="paymentAmountContainer" class="form-group hidden">
+                    <div id="paymentAmountContainer" class="form-group">
                         <label for="paymentAmount" class="form-label">Monto del Pago</label>
-                        <input type="number" id="paymentAmount" class="form-input" placeholder="Ingrese el monto del pago">
+                        <input type="number" id="paymentAmount" class="form-input" placeholder="Ingrese el monto del pago" value="0" required>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Registrar Entrada</button>
@@ -155,6 +155,6 @@
         </main>
     </div>
 
-    <script type="module" src="script.js"></script>
+    <script type="module" src="./script.js"></script>
 </body>
 </html>
