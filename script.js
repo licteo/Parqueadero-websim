@@ -4,6 +4,7 @@ import { StorageService } from './modules/StorageService.js';
 import { NotificationService } from './modules/NotificationService.js';
 import { PrintService } from './modules/PrintService.js';
 import { MonthlyReportService } from './modules/MonthlyReportService.js';
+import { CalculatorService } from './modules/CalculatorService.js';
 
 document.addEventListener('DOMContentLoaded', initializeApp);
 
