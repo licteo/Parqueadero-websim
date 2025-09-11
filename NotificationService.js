@@ -14,19 +14,17 @@ export class NotificationService {
         const notification = document.createElement('div');
         notification.className = `notification notification-${type}`;
         notification.textContent = message;
-        
-        Object.assign(notification.style, {
-            position: 'fixed',
-            top: '20px',
-            right: '20px',
-            padding: '1rem 1.5rem',
-            borderRadius: '0.5rem',
-            color: 'white',
-            fontWeight: '500',
-            zIndex: '1000',
-            animation: 'slideInRight 0.3s ease-out',
-            background: type === 'error' ? 'var(--error)' : 'var(--success)'
-        });
+        notification.style.position = 'fixed';
+        notification.style.top = '20px';
+        notification.style.right = '20px';
+        notification.style.padding = '1rem 1.5rem';
+        notification.style.borderRadius = '0.5rem';
+        notification.style.color = 'white';
+        notification.style.fontWeight = '500';
+        notification.style.zIndex = '1000';
+        notification.style.animation = 'slideInRight 0.3s ease-out';
+        notification.style.maxWidth = '300px';
+        notification.style.wordWrap = 'break-word';
 
         return notification;
     }

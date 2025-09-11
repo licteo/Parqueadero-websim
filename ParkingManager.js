@@ -75,11 +75,22 @@ export class ParkingManager {
     }
 
     printReport(type = 'all') {
-        this.printService.printReport(type, this.vehicleHistory);
+        const success = this.printService.printReport(type, this.vehicleHistory);
+        if (!success) {
+            this.notificationService.show('No hay vehículos para imprimir en esta categoría', 'info');
+        }
     }
 
     generateMonthlyReport() {
-        this.monthlyReportService.generateReport(this.vehicleHistory);
+        const success = this.monthlyReportService.generateReport(this.vehicleHistory);
+        if (!success) {
+            this.notificationService.show('No hay vehículos registrados en el mes seleccionado', 'info');
+        }
+    }
+
+    printMonthlyReport(selectedMonth) {
+        // Placeholder for monthly report printing
+        this.notificationService.show('Función de impresión mensual en desarrollo', 'info');
     }
 
     handleVehicleTypeChange(vehicleType) {
