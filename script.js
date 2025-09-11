@@ -10,11 +10,17 @@ document.addEventListener('DOMContentLoaded', initializeApp);
 
 function initializeApp() {
     try {
+        // Add base path for GitHub Pages
+        const basePath = window.location.hostname.includes('github') 
+            ? '/nombre-de-tu-repositorio/' 
+            : '/';
+            
         const storageService = new StorageService();
         const notificationService = new NotificationService();
         const printService = new PrintService();
         const monthlyReportService = new MonthlyReportService(storageService);
         
+        // Pass base path to services if needed
         const parkingManager = new ParkingManager(
             storageService,
             notificationService,
@@ -29,7 +35,7 @@ function initializeApp() {
         
     } catch (error) {
         console.error('Error initializing app:', error);
-        alert('Error al inicializar la aplicación');
+        alert('Error al inicializar la aplicación: ' + error.message);
     }
 }
 

@@ -31,6 +31,17 @@ export class ParkingManager {
     registerEntry() {
         const vehicleData = this.formHandler.getFormData();
         
+        // Validate required fields
+        if (!vehicleData.plate || !vehicleData.vehicleType || !vehicleData.paymentType) {
+            this.notificationService.show('Por favor complete todos los campos requeridos', 'error');
+            return;
+        }
+
+        if (vehicleData.paymentType === 'diario' && !vehicleData.paymentAmount) {
+            this.notificationService.show('Por favor ingrese el monto del pago', 'error');
+            return;
+        }
+        
         if (this.vehicleService.vehicleExists(this.activeVehicles, vehicleData.plate)) {
             this.notificationService.show('Ya existe un vehículo activo con esa placa', 'error');
             return;

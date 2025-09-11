@@ -30,7 +30,7 @@ export class FormHandler {
                 ? parseFloat(document.getElementById('monthlyPrice').value) 
                 : null,
             personName: document.getElementById('personName').value || null,
-            paymentAmount: document.getElementById('paymentAmount').value 
+            paymentAmount: document.getElementById('paymentType').value === 'diario' 
                 ? parseFloat(document.getElementById('paymentAmount').value) 
                 : null
         };
