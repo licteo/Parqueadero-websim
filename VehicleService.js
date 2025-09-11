@@ -1,5 +1,15 @@
 // VehicleService.js - Handles vehicle operations
 export class VehicleService {
+    constructor() {
+        this.dailyRates = {
+            carro: 5000,
+            moto: 2000,
+            buseta: 6000,
+            turbo: 8000,
+            pintor: 3000
+        };
+    }
+
     createVehicle(vehicleData) {
         return {
             id: Date.now(),
@@ -43,3 +53,4 @@ export class VehicleService {
         return labels[type] || type;
     }
 }
+
