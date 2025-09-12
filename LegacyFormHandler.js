@@ -1,23 +1,7 @@
-// FormHandler.js - Handles form operations and validation
-export class FormHandler {
+// LegacyFormHandler.js - Handles form operations for legacy version
+export class LegacyFormHandler {
     constructor(parkingManager) {
         this.parkingManager = parkingManager;
-    }
-
-    bindEvents() {
-        const self = this;
-        document.getElementById('entryForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            self.parkingManager.registerEntry();
-        });
-
-        document.getElementById('vehicleType').addEventListener('change', (e) => {
-            self.parkingManager.handleVehicleTypeChange(e.target.value);
-        });
-
-        document.getElementById('paymentType').addEventListener('change', (e) => {
-            self.parkingManager.handlePaymentTypeChange(e.target.value);
-        });
     }
 
     getFormData() {
@@ -45,27 +29,26 @@ export class FormHandler {
     }
 
     handleVehicleTypeChange(vehicleType) {
-        const busetaOptions = document.getElementById('busetaOptions');
-        const pintorOptions = document.getElementById('pintorOptions');
-        const personNameContainer = document.getElementById('personNameContainer');
-
+        var busetaOptions = document.getElementById('busetaOptions');
+        var pintorOptions = document.getElementById('pintorOptions');
+        var personNameContainer = document.getElementById('personNameContainer');
+        
         busetaOptions.classList.add('hidden');
         pintorOptions.classList.add('hidden');
         personNameContainer.classList.add('hidden');
-
+        
         if (vehicleType === 'buseta') {
             busetaOptions.classList.remove('hidden');
         } else if (vehicleType === 'pintor') {
             pintorOptions.classList.remove('hidden');
         }
-
-        // Show person name field for all vehicle types
+        
         personNameContainer.classList.remove('hidden');
     }
 
     handlePaymentTypeChange(paymentType) {
-        const monthlyPriceContainer = document.getElementById('monthlyPriceContainer');
-        const paymentAmountContainer = document.getElementById('paymentAmountContainer');
+        var monthlyPriceContainer = document.getElementById('monthlyPriceContainer');
+        var paymentAmountContainer = document.getElementById('paymentAmountContainer');
         
         if (paymentType === 'mensual') {
             monthlyPriceContainer.classList.remove('hidden');
@@ -80,3 +63,4 @@ export class FormHandler {
         }
     }
 }
+

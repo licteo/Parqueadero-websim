@@ -1,23 +1,22 @@
 // ParkingManager.js - Main business logic coordinator
 import { VehicleService } from './VehicleService.js';
-import { CalculatorService } from './CalculatorService.js';
 import { FormHandler } from './FormHandler.js';
-import { VehicleRenderer } from './VehicleRenderer.js';
+import { ActiveVehiclesComponent } from '../components/ActiveVehiclesComponent.js';
 
 export class ParkingManager {
-    constructor(storageService, notificationService, printService, monthlyReportService) {
-        this.storageService = storageService;
-        this.notificationService = notificationService;
-        this.printService = printService;
-        this.monthlyReportService = monthlyReportService;
+    constructor(services) {
+        this.services = services;
         
-        this.activeVehicles = this.storageService.getActiveVehicles();
-        this.vehicleHistory = this.storageService.getVehicleHistory();
+        // Initialize data
+        this.activeVehicles = this.services.storage.getActiveVehicles();
+        this.vehicleHistory = this.services.storage.getVehicleHistory();
         
+        // Initialize business services
         this.vehicleService = new VehicleService();
-        this.calculatorService = new CalculatorService();
         this.formHandler = new FormHandler(this);
-        this.vehicleRenderer = new VehicleRenderer(this.calculatorService);
+        
+        // Initialize UI components with proper dependencies
+        this.activeVehiclesComponent = new ActiveVehiclesComponent(this.services.calculator);
         
         this.init();
     }
@@ -28,22 +27,30 @@ export class ParkingManager {
         this.renderHistory();
     }
 
+    handleVehicleTypeChange(vehicleType) {
+        this.formHandler.handleVehicleTypeChange(vehicleType);
+    }
+
+    handlePaymentTypeChange(paymentType) {
+        this.formHandler.handlePaymentTypeChange(paymentType);
+    }
+
     registerEntry() {
         const vehicleData = this.formHandler.getFormData();
         
         // Validate required fields
         if (!vehicleData.plate || !vehicleData.vehicleType || !vehicleData.paymentType) {
-            this.notificationService.show('Por favor complete todos los campos requeridos', 'error');
+            this.services.notification.show('Por favor complete todos los campos requeridos', 'error');
             return;
         }
 
         if (vehicleData.paymentType === 'diario' && !vehicleData.paymentAmount) {
-            this.notificationService.show('Por favor ingrese el monto del pago', 'error');
+            this.services.notification.show('Por favor ingrese el monto del pago', 'error');
             return;
         }
         
         if (this.vehicleService.vehicleExists(this.activeVehicles, vehicleData.plate)) {
-            this.notificationService.show('Ya existe un vehículo activo con esa placa', 'error');
+            this.services.notification.show('Ya existe un vehículo activo con esa placa', 'error');
             return;
         }
 
@@ -52,14 +59,14 @@ export class ParkingManager {
         this.saveData();
         this.renderActiveVehicles();
         this.formHandler.clearForm();
-        this.notificationService.show('Vehículo registrado exitosamente', 'success');
+        this.services.notification.show('Vehículo registrado exitosamente', 'success');
     }
 
     exitVehicle(vehicleId) {
         const vehicle = this.vehicleService.findVehicle(this.activeVehicles, vehicleId);
         if (!vehicle) return;
 
-        const cost = this.calculatorService.calculateCost(vehicle);
+        const cost = this.services.calculator.calculateCost(vehicle);
         const updatedVehicle = this.vehicleService.moveToHistory(vehicle, cost);
         
         this.vehicleHistory.unshift(updatedVehicle);
@@ -69,50 +76,33 @@ export class ParkingManager {
         this.renderActiveVehicles();
         this.renderHistory();
         
-        this.notificationService.show(`Vehículo ${vehicle.plate} ha salido. Total: $${cost.toLocaleString()}`, 'success');
+        this.services.notification.show(`Vehículo ${vehicle.plate} ha salido. Total: $${cost.toLocaleString()}`, 'success');
     }
 
     renderActiveVehicles() {
-        this.vehicleRenderer.renderActiveVehicles(this.activeVehicles, 'activeVehicles');
+        this.activeVehiclesComponent.renderActiveVehicles(this.activeVehicles);
     }
 
     renderHistory() {
-        this.vehicleRenderer.renderHistory(this.vehicleHistory, 'historyVehicles');
+        this.activeVehiclesComponent.renderHistory(this.vehicleHistory);
     }
 
     saveData() {
-        this.storageService.saveActiveVehicles(this.activeVehicles);
-        this.storageService.saveVehicleHistory(this.vehicleHistory);
+        this.services.storage.saveActiveVehicles(this.activeVehicles);
+        this.services.storage.saveVehicleHistory(this.vehicleHistory);
     }
 
     printReport(type = 'all') {
-        const success = this.printService.printReport(type, this.vehicleHistory);
+        const success = this.services.print.printReport(type, this.vehicleHistory);
         if (!success) {
-            this.notificationService.show('No hay vehículos para imprimir en esta categoría', 'info');
+            this.services.notification.show('No hay vehículos para imprimir en esta categoría', 'info');
         }
     }
 
     generateMonthlyReport() {
-        const success = this.monthlyReportService.generateReport(this.vehicleHistory);
+        const success = this.services.monthlyReport.generateReport(this.vehicleHistory);
         if (!success) {
-            this.notificationService.show('No hay vehículos registrados en el mes seleccionado', 'info');
+            this.services.notification.show('No hay vehículos registrados en el mes seleccionado', 'info');
         }
-    }
-
-    printMonthlyReport(selectedMonth) {
-        // Placeholder for monthly report printing
-        this.notificationService.show('Función de impresión mensual en desarrollo', 'info');
-    }
-
-    handleVehicleTypeChange(vehicleType) {
-        this.formHandler.handleVehicleTypeChange(vehicleType);
-    }
-
-    handlePaymentTypeChange(paymentType) {
-        this.formHandler.handlePaymentTypeChange(paymentType);
-    }
-
-    getVehicleTypeLabel(type) {
-        return this.vehicleService.getVehicleTypeLabel(type);
     }
 }
