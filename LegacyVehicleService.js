@@ -1,4 +1,4 @@
-// LegacyVehicleService.js - Handles vehicle operations for legacy version
+// modules/LegacyVehicleService.js - Handles vehicle operations for legacy version
 export class LegacyVehicleService {
     constructor() {
         this.dailyRates = {

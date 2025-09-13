@@ -1,6 +1,4 @@
-
-```javascript
-// LegacyMonthlyReportService.js - Handles monthly report generation for legacy version
+// modules/LegacyMonthlyReportService.js - Handles monthly report generation for legacy version
 export class LegacyMonthlyReportService {
     generateMonthlyReport(vehicleHistory) {
         var monthInput = document.getElementById('monthSelect');
@@ -59,22 +57,22 @@ export class LegacyMonthlyReportService {
     renderMonthlyReport(stats, selectedMonth) {
         var resultsContainer = document.getElementById('monthlySummary');
 
-        var html = '<div class=\"summary-card\"><div class=\"summary-number\">' + stats.total + '</div>';
-        html += '<div class=\"summary-label\">Total Vehículos</div></div>';
-        html += '<div class=\"summary-card\"><div class=\"summary-number\">' + stats.carro + '</div>';
-        html += '<div class=\"summary-label\">Carros Particulares</div></div>';
-        html += '<div class=\"summary-card\"><div class=\"summary-number\">' + stats.moto + '</div>';
-        html += '<div class=\"summary-label\">Motos</div></div>';
-        html += '<div class=\"summary-card\"><div class=\"summary-number\">' + stats.buseta + '</div>';
-        html += '<div class=\"summary-label\">Busetas</div></div>';
-        html += '<div class=\"summary-card\"><div class=\"summary-number\">' + stats.turbo + '</div>';
-        html += '<div class=\"summary-label\">Turbos</div></div>';
-        html += '<div class=\"summary-card\"><div class=\"summary-number\">' + stats.pintor + '</div>';
-        html += '<div class=\"summary-label\">Pintores/Mecánicos</div></div>';
-        html += '<div class=\"summary-card summary-card-total\"><div class=\"summary-number\">$' + stats.totalRevenue.toLocaleString() + '</div>';
-        html += '<div class=\"summary-label\">Total Recaudado</div></div>';
-        html += '<div style=\"grid-column: 1 / -1; text-align: center; margin-top: 2rem;\">';
-        html += '<button class=\"btn btn-primary\" onclick=\"legacyParkingManager.printMonthlyReport(\\'' + selectedMonth + '\\')\">🖨️ Imprimir Reporte Mensual</button></div>';
+        var html = '<div class="summary-card"><div class="summary-number">' + stats.total + '</div>';
+        html += '<div class="summary-label">Total Vehículos</div></div>';
+        html += '<div class="summary-card"><div class="summary-number">' + stats.carro + '</div>';
+        html += '<div class="summary-label">Carros Particulares</div></div>';
+        html += '<div class="summary-card"><div class="summary-number">' + stats.moto + '</div>';
+        html += '<div class="summary-label">Motos</div></div>';
+        html += '<div class="summary-card"><div class="summary-number">' + stats.buseta + '</div>';
+        html += '<div class="summary-label">Busetas</div></div>';
+        html += '<div class="summary-card"><div class="summary-number">' + stats.turbo + '</div>';
+        html += '<div class="summary-label">Turbos</div></div>';
+        html += '<div class="summary-card"><div class="summary-number">' + stats.pintor + '</div>';
+        html += '<div class="summary-label">Pintores/Mecánicos</div></div>';
+        html += '<div class="summary-card summary-card-total"><div class="summary-number">$' + stats.totalRevenue.toLocaleString() + '</div>';
+        html += '<div class="summary-label">Total Recaudado</div></div>';
+        html += '<div style="grid-column: 1 / -1; text-align: center; margin-top: 2rem;">';
+        html += '<button class="btn btn-primary" onclick="legacyParkingManager.printMonthlyReport(\'' + selectedMonth + '\')">🖨️ Imprimir Reporte Mensual</button></div>';
 
         resultsContainer.innerHTML = html;
         document.getElementById('monthlyReportResults').classList.remove('hidden');

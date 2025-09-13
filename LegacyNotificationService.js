@@ -1,11 +1,10 @@
-// LegacyNotificationService.js - Traditional notification service
+// modules/LegacyNotificationService.js - Traditional notification service
 export class LegacyNotificationService {
     show(message, type) {
         var notification = document.createElement('div');
         notification.className = 'notification notification-' + type;
         notification.textContent = message;
         
-        // Apply styles
         notification.style.position = 'fixed';
         notification.style.top = '20px';
         notification.style.right = '20px';

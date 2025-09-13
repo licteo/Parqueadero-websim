@@ -1,6 +1,4 @@
-
-```javascript
-// LegacyPrintService.js - Handles printing and report generation for legacy version
+// modules/LegacyPrintService.js - Handles printing and report generation for legacy version
 export class LegacyPrintService {
     printReport(type, vehicleHistory) {
         var vehicles = type === 'all' ? vehicleHistory : vehicleHistory.filter(function(v) {
@@ -19,7 +17,7 @@ export class LegacyPrintService {
         printWindow.document.write(html);
         printWindow.document.close();
         printWindow.print();
-
+        
         return true;
     }
 

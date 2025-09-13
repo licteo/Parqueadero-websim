@@ -1,4 +1,4 @@
-// LegacyParkingManager.js - Refactored to use smaller, focused modules
+// modules/LegacyParkingManager.js - Refactored to use smaller, focused modules
 import { LegacyStorageService } from './LegacyStorageService.js';
 import { LegacyCalculatorService } from './LegacyCalculatorService.js';
 import { LegacyNotificationService } from './LegacyNotificationService.js';

@@ -1,4 +1,4 @@
-// LegacyStorageService.js - Traditional storage service
+// modules/LegacyStorageService.js - Traditional storage service
 export class LegacyStorageService {
     getActiveVehicles() {
         return JSON.parse(localStorage.getItem('activeVehicles')) || [];

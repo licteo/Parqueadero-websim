@@ -1,4 +1,4 @@
-// LegacyCalculatorService.js - Traditional calculator service
+// modules/LegacyCalculatorService.js - Traditional calculator service
 export class LegacyCalculatorService {
     constructor() {
         this.dailyRates = {

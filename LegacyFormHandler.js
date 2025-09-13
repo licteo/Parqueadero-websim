@@ -1,4 +1,4 @@
-// LegacyFormHandler.js - Handles form operations for legacy version
+// modules/LegacyFormHandler.js - Handles form operations for legacy version
 export class LegacyFormHandler {
     constructor(parkingManager) {
         this.parkingManager = parkingManager;

@@ -1,4 +1,4 @@
-// LegacyVehicleRenderer.js - Handles vehicle UI rendering for legacy version
+// modules/LegacyVehicleRenderer.js - Handles vehicle UI rendering for legacy version
 export class LegacyVehicleRenderer {
     constructor(calculatorService) {
         this.calculatorService = calculatorService;
