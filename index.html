@@ -4,58 +4,147 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Gestión de Parqueadero</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="app">
-        <div class="container">
-            <header id="appHeader" class="app-header">
-                <h1 class="app-title">🅿️ Sistema de Parqueadero</h1>
-                <p class="app-subtitle">Gestión inteligente de vehículos</p>
-            </header>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">🅿️ Sistema de Parqueadero</h1>
+            <p class="subtitle">Gestión inteligente de vehículos</p>
+        </header>
 
-            <main id="appMain" class="main-content">
-                <!-- Registration Form Card -->
-                <section class="registration-form" id="registrationForm"></section>
-
-                <!-- Active Vehicles Card -->
-                <section class="card active-vehicles-card">
-                    <h2 class="card-title">Vehículos Activos</h2>
-                    <div id="activeVehicles" class="vehicles-list"></div>
-                </section>
-
-                <!-- History Card -->
-                <section class="card history-card">
-                    <h2 class="card-title">Historial de Vehículos</h2>
-                    <div id="historyVehicles" class="vehicles-list"></div>
-                </section>
-
-                <!-- Print Buttons Card -->
-                <section class="card print-card" id="printButtons"></section>
-
-                <!-- Monthly Report Card -->
-                <section class="card monthly-report-card">
-                    <h2 class="card-title">📊 Reporte Mensual</h2>
+        <main class="main-content">
+            <!-- Formulario de Registro -->
+            <section class="card registration-card">
+                <h2 class="card-title">Registrar Entrada</h2>
+                <form id="entryForm" class="form">
                     <div class="form-group">
-                        <label for="monthSelect" class="form-label">Seleccionar Mes</label>
-                        <input type="month" id="monthSelect" class="form-input">
+                        <label for="plate" class="form-label">Placa del Vehículo</label>
+                        <input type="text" id="plate" class="form-input" placeholder="Ej: ABC123" required>
                     </div>
-                    <div class="print-buttons">
-                        <button class="btn btn-primary" onclick="parkingManager.generateMonthlyReport()">
-                            Generar Reporte Mensual
-                        </button>
+
+                    <div class="form-group">
+                        <label for="vehicleType" class="form-label">Tipo de Vehículo</label>
+                        <select id="vehicleType" class="form-select" required>
+                            <option value="">Seleccione tipo</option>
+                            <option value="carro">Carro particular</option>
+                            <option value="moto">Moto</option>
+                            <option value="buseta">Buseta</option>
+                            <option value="turbo">Turbo</option>
+                            <option value="pintor">Pintor/Mecánico</option>
+                        </select>
                     </div>
-                    <div id="monthlyReportResults" class="monthly-results hidden">
-                        <h3 class="card-title">Resumen del Mes</h3>
-                        <div id="monthlySummary" class="monthly-summary"></div>
+
+                    <div id="busetaOptions" class="form-group hidden">
+                        <label for="busetaCompany" class="form-label">Empresa de Buseta</label>
+                        <select id="busetaCompany" class="form-select">
+                            <option value="">Seleccione empresa</option>
+                            <option value="Lusitania">Lusitania</option>
+                            <option value="San Juan">San Juan</option>
+                            <option value="Unitransa">Unitransa</option>
+                            <option value="Cotransa">Cotransa</option>
+                            <option value="Flotax">Flotax</option>
+                        </select>
                     </div>
-                </section>
-            </main>
-        </div>
+
+                    <div id="pintorOptions" class="form-group hidden">
+                        <label for="pintorName" class="form-label">Nombre del Pintor/Mecánico</label>
+                        <select id="pintorName" class="form-select">
+                            <option value="">Seleccione persona</option>
+                            <option value="Don Iván">Don Iván</option>
+                            <option value="Don Álvaro">Don Álvaro</option>
+                            <option value="Don David">Don David</option>
+                            <option value="Don Jon">Don Jon</option>
+                            <option value="Don Pedro">Don Pedro</option>
+                            <option value="Don Garavito">Don Garavito</option>
+                            <option value="Don Lucho">Don Lucho</option>
+                            <option value="Don Cristian">Don Cristian</option>
+                            <option value="Don Miguel">Don Miguel</option>
+                            <option value="Don Francisco">Don Francisco</option>
+                            <option value="Moisés">Moisés</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="paymentType" class="form-label">Tipo de Pago</label>
+                        <select id="paymentType" class="form-select" required>
+                            <option value="">Seleccione tipo</option>
+                            <option value="diario">Diario</option>
+                            <option value="mensual">Mensual</option>
+                        </select>
+                    </div>
+
+                    <div id="monthlyPriceContainer" class="form-group hidden">
+                        <label for="monthlyPrice" class="form-label">Precio Mensual</label>
+                        <input type="number" id="monthlyPrice" class="form-input" placeholder="Ingrese el precio mensual">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Registrar Entrada</button>
+                </form>
+            </section>
+
+            <!-- Vehículos Activos -->
+            <section class="card active-vehicles-card">
+                <h2 class="card-title">Vehículos Activos</h2>
+                <div id="activeVehicles" class="vehicles-list">
+                    <p class="empty-message">No hay vehículos activos</p>
+                </div>
+            </section>
+
+            <!-- Historial -->
+            <section class="card history-card">
+                <h2 class="card-title">Historial de Vehículos</h2>
+                <div id="historyVehicles" class="vehicles-list">
+                    <p class="empty-message">No hay vehículos en el historial</p>
+                </div>
+            </section>
+
+            <!-- Botones de impresión -->
+            <section class="card print-card">
+                <h2 class="card-title">📄 Imprimir Reportes</h2>
+                <div class="print-buttons">
+                    <button class="btn btn-primary" onclick="parkingManager.printReport('all')">
+                        Imprimir Todo
+                    </button>
+                    <button class="btn btn-secondary" onclick="parkingManager.printReport('carro')">
+                        Carros Particulares
+                    </button>
+                    <button class="btn btn-secondary" onclick="parkingManager.printReport('moto')">
+                        Motos
+                    </button>
+                    <button class="btn btn-secondary" onclick="parkingManager.printReport('buseta')">
+                        Busetas
+                    </button>
+                    <button class="btn btn-secondary" onclick="parkingManager.printReport('turbo')">
+                        Turbos
+                    </button>
+                    <button class="btn btn-secondary" onclick="parkingManager.printReport('pintor')">
+                        Pintores/Mecánicos
+                    </button>
+                </div>
+            </section>
+
+            <!-- Reporte Mensual -->
+            <section class="card monthly-report-card">
+                <h2 class="card-title">📊 Reporte Mensual</h2>
+                <div class="form-group">
+                    <label for="monthSelect" class="form-label">Seleccionar Mes</label>
+                    <input type="month" id="monthSelect" class="form-input">
+                </div>
+                <div class="print-buttons">
+                    <button class="btn btn-primary" onclick="parkingManager.generateMonthlyReport()">
+                        Generar Reporte Mensual
+                    </button>
+                </div>
+                <div id="monthlyReportResults" class="monthly-results hidden">
+                    <h3 class="card-title">Resumen del Mes</h3>
+                    <div id="monthlySummary" class="monthly-summary"></div>
+                </div>
+            </section>
+        </main>
     </div>
 
-    <!-- Load main module as ES6 module -->
-    <script type="module" src="main.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

@@ -38,14 +38,13 @@ body {
     padding: 2rem;
 }
 
-/* Header Component Styles */
-.app-header {
+.header {
     text-align: center;
     margin-bottom: 3rem;
     animation: fadeInDown 0.8s ease-out;
 }
 
-.app-title {
+.title {
     font-size: 2.5rem;
     font-weight: 700;
     color: var(--primary-blue);
@@ -55,7 +54,7 @@ body {
     -webkit-text-fill-color: transparent;
 }
 
-.app-subtitle {
+.subtitle {
     font-size: 1.1rem;
     color: var(--gray-600);
     font-weight: 400;
@@ -179,7 +178,6 @@ body {
     gap: 1rem;
 }
 
-/* Vehicle Card Component Styles */
 .vehicle-card {
     background: var(--gray-50);
     border: 1px solid var(--gray-200);
@@ -264,8 +262,7 @@ body {
     grid-column: 1 / -1;
 }
 
-/* Print Buttons Component Styles */
-.print-buttons-container {
+.print-buttons {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1rem;
@@ -289,13 +286,6 @@ body {
     margin-top: 2rem;
     padding-top: 2rem;
     border-top: 1px solid var(--gray-200);
-}
-
-/* Monthly Report Component Styles */
-.monthly-summary-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
 }
 
 .monthly-summary {
@@ -344,14 +334,6 @@ body {
     color: rgba(255, 255, 255, 0.9);
 }
 
-/* Notification Component Styles */
-.notification-container {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1000;
-}
-
 @keyframes fadeInDown {
     from {
         opacity: 0;
@@ -390,7 +372,7 @@ body {
         padding: 1rem;
     }
     
-    .app-title {
+    .title {
         font-size: 2rem;
     }
     
@@ -398,7 +380,7 @@ body {
         padding: 1.5rem;
     }
     
-    .print-buttons-container {
+    .print-buttons {
         grid-template-columns: 1fr;
     }
 }
