@@ -5,18 +5,17 @@ export class FormHandler {
     }
 
     bindEvents() {
-        const self = this;
         document.getElementById('entryForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            self.parkingManager.registerEntry();
+            this.parkingManager.registerEntry();
         });
 
         document.getElementById('vehicleType').addEventListener('change', (e) => {
-            self.parkingManager.handleVehicleTypeChange(e.target.value);
+            this.parkingManager.handleVehicleTypeChange(e.target.value);
         });
 
         document.getElementById('paymentType').addEventListener('change', (e) => {
-            self.parkingManager.handlePaymentTypeChange(e.target.value);
+            this.parkingManager.handlePaymentTypeChange(e.target.value);
         });
     }
 
@@ -31,7 +30,7 @@ export class FormHandler {
                 ? parseFloat(document.getElementById('monthlyPrice').value) 
                 : null,
             personName: document.getElementById('personName').value || null,
-            paymentAmount: document.getElementById('paymentType').value === 'diario' 
+            paymentAmount: document.getElementById('paymentAmount').value 
                 ? parseFloat(document.getElementById('paymentAmount').value) 
                 : null
         };

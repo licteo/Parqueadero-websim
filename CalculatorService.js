@@ -16,7 +16,7 @@ export class CalculatorService {
         }
 
         // Use custom payment amount if provided
-        if (vehicle.paymentAmount !== null && vehicle.paymentAmount !== undefined) {
+        if (vehicle.paymentAmount) {
             return vehicle.paymentAmount;
         }
 

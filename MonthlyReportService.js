@@ -1,10 +1,7 @@
-// MonthlyReportService.js - Refactored to use component
-import { MonthlyReportComponent } from '../components/MonthlyReportComponent.js';
-
+// MonthlyReportService.js - Handles monthly report generation
 export class MonthlyReportService {
     constructor(storageService) {
         this.storageService = storageService;
-        this.monthlyReportComponent = new MonthlyReportComponent(this);
     }
 
     generateReport(vehicleHistory) {
@@ -12,6 +9,7 @@ export class MonthlyReportService {
         const selectedMonth = monthInput.value;
 
         if (!selectedMonth) {
+            // Notification will be handled by caller
             return false;
         }
 
@@ -23,7 +21,7 @@ export class MonthlyReportService {
         }
 
         const stats = this.calculateStats(monthlyVehicles);
-        this.monthlyReportComponent.renderMonthlyReport(stats, selectedMonth);
+        this.renderMonthlyReport(stats, selectedMonth);
 
         return true;
     }
